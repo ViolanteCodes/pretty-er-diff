@@ -32,3 +32,19 @@ def print_diff(a, b, indent_size: int = 2, theme: Theme = DEFAULT_THEME):
         print(flags, end="")
         print(" " * (indent_size * line.indent), end="")
         print(line.s, end=f"{theme.reset}\n")
+
+def print_diff_differences(a, b, indent_size: int = 2, theme: Theme = DEFAULT_THEME):
+    lines = get_annotated_lines_from_diff(diff_json(a, b))
+
+    for line in lines:
+        if Flag.ADDED in line.flags:
+            flags = f"{theme.added}+ "
+        elif Flag.REMOVED in line.flags:
+            flags = f"{theme.removed}- "
+        else:
+            flags = None
+        
+        if flags:
+            print(flags, end="")
+            print(" " * (indent_size * line.indent), end="")
+            print(line.s, end=f"{theme.reset}\n")
